@@ -5,31 +5,71 @@
     <title>Document</title>
 </head>
 <body>
-    <button>New gif</button>
+    <button id="randomBtn">Random</button>
+    <div class="searchContainer">
+
+            <input type="text" placeholder="search..." name="search" data-search>
+            <button id="searchBtn" type="button">🔍</button>
+    </div>
     <img src="#">
-    
 
     <script>
+        // defining elements
         const img = document.querySelector('img');
-        const newGifBtn = document.querySelector('button');
-        loadGif();
+        // const newGifBtn = document.getElementById('newGifBtn');
+        const searchBtn = document.getElementById('searchBtn');
+        const searchInput = document.querySelector('[data-search]');
+        const randomBtn = document.getElementById('randomBtn');
 
 
-        newGifBtn.addEventListener('click', () => {
-            // console.log('test');
-            loadGif();
+        // init on dog search
+        loadGif('random');
+
+        //event listener on clicking enter on the search
+        searchInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter'){
+                loadGif(document.querySelector('[data-search]').value);
+            }
+        })
+
+        // event listener on clicking button to search
+        searchBtn.addEventListener('click', () => {
+            loadGif(document.querySelector('[data-search]').value);
         });
 
+        // event listener on random button
+        randomBtn.addEventListener('click', () => {
+            loadRandomGif();
+        })
 
-        function loadGif(){
-            fetch('https://api.giphy.com/v1/gifs/translate?api_key=Yu70FyQnyKrY3Jaf7Tnl0CtTtyDCikEO&s=dogs',
-        {mode: 'cors'})
-            .then(function(response) {
-                return response.json();
-            })
-            .then(function(response) {
-                img.src = response.data.images.original.url;
-            });
+
+
+        function loadGif(searchKey){
+            fetch('https://api.giphy.com/v1/gifs/translate?api_key=Yu70FyQnyKrY3Jaf7Tnl0CtTtyDCikEO&s=' + searchKey,
+            {mode: 'cors'})
+                .then(function(response) {
+                    return response.json();
+                })
+                .catch(function(err) {
+                    console.log('Error: ', err);
+                })
+                .then(function(response) {
+                    img.src = response.data.images.original.url;
+                })
+                .catch(function(error) {
+                    console.log('Error: ' + error);
+                });
+        }
+
+        function loadRandomGif(){
+            fetch('https://api.giphy.com/v1/gifs/random?api_key=Yu70FyQnyKrY3Jaf7Tnl0CtTtyDCikEO',
+            {mode: 'cors'})
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(response) {
+                    img.src = response.data.images.original.url;
+                })
         }
     </script>
 </body>
