@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <button>New gif</button>
+    <img src="#">
+    
+
+    <script>
+        const img = document.querySelector('img');
+        const newGifBtn = document.querySelector('button');
+        loadGif();
+
+
+        newGifBtn.addEventListener('click', () => {
+            // console.log('test');
+            loadGif();
+        });
+
+
+        function loadGif(){
+            fetch('https://api.giphy.com/v1/gifs/translate?api_key=Yu70FyQnyKrY3Jaf7Tnl0CtTtyDCikEO&s=dogs',
+        {mode: 'cors'})
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(response) {
+                img.src = response.data.images.original.url;
+            });
+        }
+    </script>
+</body>
+</html>
